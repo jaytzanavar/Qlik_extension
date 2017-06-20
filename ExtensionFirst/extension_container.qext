@@ -1,0 +1,18 @@
+{
+	"name":"The extension Container",
+	"description":"First extension by scratch",
+	"icon":"extension",
+	"type":"visualization",
+	"preview":"images/qlik.png",
+	"version":"1.0.0",
+	"author":"Jay",
+	"homepage": "",
+	"keywords": "qlik-sense, visualization",
+	"license": "",
+	"repository": "",
+	"dependencies": {
+		"qlik-sense": ">=3.0.x"
+	}
+}
+
+
