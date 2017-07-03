@@ -1,6 +1,6 @@
 {
-	"name":"The extension Container",
-	"description":"First extension by scratch",
+	"name":"d3j_sExte",
+	"description":"MessingWith d3.js",
 	"icon":"extension",
 	"type":"visualization",
 	"preview":"images/qlik.png",
@@ -14,5 +14,3 @@
 		"qlik-sense": ">=3.0.x"
 	}
 }
-
-

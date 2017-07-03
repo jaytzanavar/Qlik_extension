@@ -2,9 +2,13 @@ define(
 	['jquery'],
 function($){
 	'use strict';
+	
 	//$("<style>").html(cssContent).appendTo("head"); FOR css purposes ;)
 
 	//Components edit ********* MAKE MY OWN Components ************* //
+		
+			
+
 	var stringProperty={
 		ref:"myDynamicOutput",//data to be passed arround the tables
 		type:"string", 
@@ -16,14 +20,16 @@ function($){
 	var MinProperty={
 		type:"integer",
 		label:"Minimum",
-		ref:"myproperties.min"
+		ref:"myproperties.min",
+		expression:"optional"
 		};
 
 
 		var MaxProperty={
 			type:"integer",
 			label:"Maximum",
-			ref:"myproperties.max"
+			ref:"myproperties.max",
+			expression:"optional"
 		};
 
 		// HERE I JOIN THE Properties into this one
@@ -31,6 +37,7 @@ function($){
 		{
 			component:"expandable-items",//watch the spelling!!!
 			label:" Custom made Section",
+			ref:"CustomSelection",
 			items:{
 				header1:{
 					type:"items",
@@ -49,21 +56,21 @@ function($){
 
 
 			var lyr1={
-						ref:"myDynamicOutput",//data to be passed arround the tables
+						ref:"lyr1",//data to be passed arround the tables
 						type:"string", 
 						label:"Steve walks warily down" ,//name
 						expression:"optional"
 					};
 
 			var lyr2={
-						ref:"myDynamicOutput",//data to be passed arround the tables
+						ref:"lyr2",//data to be passed arround the tables
 						type:"string", 
 						label:"With his brim pulled way down low" ,//name
 						expression:"optional"
 					  };
 
 			var lyr3={
-					ref:"myDynamicOutput",//data to be passed arround the tables
+					ref:"lyr3",//data to be passed arround the tables
 					type:"string", 
 					label:"Ain't no sound but",//name
 					expression:"optional"
@@ -73,6 +80,7 @@ function($){
 				{  // not the same as Custom section
 						label:"anotheronebites",
 						component:"expandable-items",
+						ref:"queenSong",
 						items:{
 							headerA:{
 							type:"items",
@@ -92,33 +100,46 @@ function($){
 
 	return{
 
+			initialProperties: {
+				version: 1.0,
+				qHyperCubeDef: {
+					qDimensions: [],
+					qMeasures: [],
+					qInterColumnSortOrder : [0,1],
+					 qInitialDataFetch : [{  
+	                    qWidth : 10,  
+	                    qHeight : 1000  
+	                }]  
+				},
+				qListObjectDef : {
+					qShowAlternatives : true,
+					qFrequencyMode : "V",
+					qInitialDataFetch : [{
+						qWidth : 2,
+						qHeight : 50
+					}]
+				},
+				fixed : true,
+				width : 25,
+				percent : true,
+				selectionMode : "CONFIRM"
+				
+			},
 			
-			// initialProperties : {
-			// 			version: 1.0,
-			// 			qHyperCubeDef : {
-			// 				qDimensions : [],
-			// 				qMeasures : [],
-			// 				qInitialDataFetch : [{
-			// 					qWidth : 10,
-			// 					qHeight : 50
-			// 				}]
-			// 			}
-			// 		},
+			
 
 			definition:{
 				type:"items",
 				component:"accordion",
 				items:{
-					// dimensions:{
-					// 	uses: "dimensions",
-					// 	min: 1,
-					// 	max: 1
-					// },
-					// measures:{
-					// 	uses: "measures",
-					// 	min: 1,
-					// 	max: 1
-					// },
+					dimensions:{
+						uses: "dimensions",
+						
+					},
+					measures:{
+						uses: "measures",
+					
+					},
 					sorting:{
 						uses: "sorting"
 					},
@@ -128,8 +149,13 @@ function($){
 					settings:{
 						uses: "settings",
 						items:{
-							MyDropdownProp:
-								{
+							initFetchRows : {
+								ref : "qHyperCubeDef.qInitialDataFetch.0.qHeight",
+								translation : "Thresshold",
+								type : "number",
+								defaultValue : 50
+							},
+					MyDropdownProp:{
 								type:"string",
 								component:"dropdown",
 								label:"custom dropdown",
@@ -149,7 +175,7 @@ function($){
 									],
 								defaultValue:"v"
 								},
-								MyColorPicker:{
+					MyColorPicker:{
 									label:"Palette",
 									component:"color-picker",
 									ref:"myColor",
@@ -178,26 +204,43 @@ function($){
 			//Paint resp.Rendering logic renders the file of the extension
 			paint: function ($element, layout)
 			{
-					console.info('paint >> layout >> ', layout);
+					
+					console.info('paint >> layout >>  Data // HyperCube', layout.qHyperCube);
 					$element.empty();
+
+					var lastrow = 0, me = this;
+				     //loop through the rows we have and render
+				     // this.backendApi.eachDataRow( function ( rownum, row ) {
+				     //            lastrow = rownum;
+				     //            //do something with the row..
+				     // });
+								
 					var $myVar = $(document.createElement('div'));
+					var $addEle=$(document.createElement('div'));
+					var $msg= $( document.createElement('div'));
+					var $newMsg= $(document.createElement('div'));
+
+
+					$msg.html('<b>The file embeded values:</b><br/><h1>The title::'+layout.title+'</h1><br/>'+'<h2>The Subtitle::'+layout.subtitle+'</h2><br/>');
+					
+					$newMsg.html('add me lyrics  '+layout.lyr1+" "+layout.lyr2+"		"+layout.lyr2);
 					$myVar.html('the simple extension starts');
-					var $addEle=$(document.createElement('a'));
 					$addEle.html(layout.myDynamicOutput);  // OUTPU FROM PERSONAL Apperance panel Item properties
 					$addEle.html(layout.myproperties.max);
+					$addEle.html(layout.myproperties.min);
+
+					$element.append($msg);
+					$element.append($newMsg);
 					$element.append( $myVar );
 					$element.append( $addEle );
 
-					var $msg= $( document.createElement('div'));
-
-					$msg.html('<b>The file embeded values:</b><br/><h1>The title::'+layout.title+'</h1><br/>'+'<h2>The Subtitle::'+layout.subtitle+'</h2><br/>');
-					$element.append($msg);
+					
 
 
-					 var err = {
-				        message: 'Something went wrong',
-				        errCode: '204'
-				    };
+						 var err = {
+								        message: 'Something went wrong',
+								        errCode: '204'
+								    };
 
 				    /* how to show errors*/
 
