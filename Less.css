@@ -1,0 +1,63 @@
+@background-color: #ffffff;
+@text-color: #1A237E;
+
+@my-selector: banner;
+
+.@{my-selector}{
+	font-weight: bold;
+	line-height:340px;
+	margin: 0 auto;
+}
+
+
+p{
+	backgroud-color: @background-color;
+	color:@text-color;
+	padding: 15px;
+}
+
+ul{
+	background-color: @background-color;
+}
+
+li{
+	color:@text-color;
+}
+
+
+#circle{
+	background-color: #4CAF50;
+	border-radius:100%;
+
+
+}
+/*
+* #circle(){
+	background-color: blue;
+}	border-radius:100%;
+*
+*/
+
+
+#circle(@size: 25px){
+
+}
+
+#small-circle{
+	#circle
+}
+
+#big-circle{
+	#circle(100px)
+}
+#small-circle{
+  width: 50px;
+  height: 50px;
+  #circle
+}
+
+#big-circle{
+	width: 100px;
+	height: 100px;
+	#circle
+}
